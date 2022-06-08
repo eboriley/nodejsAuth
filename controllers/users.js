@@ -56,6 +56,17 @@ exports.addUser = async (req, res) => {
   );
 };
 
+exports.isAuth = async (req, res, next) => {
+  try {
+    if (req.session.isAuth && req.session.uid === 101) {
+      next();
+    }
+    res.redirect('/');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.login = async (req, res) => {
   let user = req.body;
   const sql = `SELECT * from users WHERE id = ?`;
@@ -64,7 +75,10 @@ exports.login = async (req, res) => {
       try {
         if (await bcrypt.compare(user.pwd, rows[0].pwd)) {
           const { id, email, name } = rows[0];
-
+          req.session.isAuth = true;
+          req.session.uid = id;
+          req.session.name = name;
+          req.session.email = email;
           res.json({ id, email, name });
         } else {
           res.send('Incorrect Username or password');

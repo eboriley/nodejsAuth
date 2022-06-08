@@ -9,7 +9,13 @@ router.get('/', (req, res) => {
 router.post('/login', userController.login);
 
 router.get(
-  '/people',
+  '/events',
+  userController.isAuth,
+  userController.userEvents
+);
+
+router.get(
+  '/admin-events',
   userController.isAuth,
   userController.adminEvents
 );

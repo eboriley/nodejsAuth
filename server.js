@@ -46,7 +46,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
-    cookie: { secure: false },
+    cookie: { sameSite: 'lax', secure: false },
     // logic to save session to db
   })
 );
